@@ -42,6 +42,10 @@ void setup() {
 int value = 0;
 
 void loop() {
+  weather();
+}
+
+void weather() {
   WiFiClient client;
   String a[3];
   int i=0;
@@ -121,5 +125,6 @@ void loop() {
   
   Serial.println();
   Serial.println("closing connection");
+
 }
 
