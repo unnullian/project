@@ -1,0 +1,7 @@
+http://www.instructables.com/id/Interfacing-RFID-RC522-With-Arduino-MEGA-a-Simple-/
+http://www.hardcopyworld.com/ngine/aduino/index.php/archives/581
+
+http://playground.arduino.cc/Learning/MFRC522
+
+
+http://whiteat.com/hserver_example/226940

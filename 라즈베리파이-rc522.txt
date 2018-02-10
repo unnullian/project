@@ -1,0 +1,51 @@
+http://www.instructables.com/id/RFID-RC522-Raspberry-Pi/
+
+SDA <--> 24
+
+SCK <--> 23
+
+MOSI <--> 19
+
+MISO <--> 21
+
+IRQ <--> UNUSED
+
+GND <--> 6
+
+RST <--> 22
+
+3.3V <--> 1
+
+1. Enable SPI Interface
+
+sudo raspi-config
+
+2. Reboot
+
+sudo reboot
+
+3. Check if spi_bcm2835 is loaded
+
+lsmod | grep spi
+
+4. Install python2.7-dev
+
+sudo apt-get install python2.7-dev
+
+5. Download Git Project, change directory, and install
+
+git clone https://github.com/lthiery/SPI-Py.git
+
+cd SPI-Py
+
+sudo python setup.py install
+
+6. Install MFRC522-python
+
+git clone https://github.com/mxgxw/MFRC522-python.git
+
+cd MFRC522-python
+
+7. Run script
+
+python Read.py
