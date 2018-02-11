@@ -54,7 +54,7 @@ void setup() {
     Serial.println("certificate doesn't match");
   }
 
-  String url = "/wid/queryDFSRSS.jsp?zone=1117053000";
+  String url = "http://www.weather.go.kr/wid/queryDFSRSS.jsp?zone=1117053000";
   Serial.print("requesting URL: ");
   Serial.println(url);
 
