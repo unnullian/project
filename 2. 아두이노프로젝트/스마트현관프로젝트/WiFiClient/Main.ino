@@ -2,6 +2,7 @@
 void setMyLed(LedControl lc ,int loc, char ch, bool flag);
 String getTime();
 void getWeather();
+float getAmps(int channel);
 
 void setup() {
   Serial.begin(115200);
@@ -116,6 +117,11 @@ void loop() {
   setMyLed(lc ,0, minCh[1], false);
 
   delay(delaytime);
+
+  Serial.print("1port => ");
+  Serial.println(getAmps(0));
+  Serial.print("2port => ");
+  Serial.println(getAmps(1));
 
   //인체감지가 되면 날씨정보를 불러와서 뽑아냄
 }
