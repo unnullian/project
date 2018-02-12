@@ -17,9 +17,7 @@ const char* privateKey = "....................";
 
 int value = 0;
 
-
-
-void updateAMPS(float amp1) {
+void updateAMPS(String location, String name1, float amp1, int flag1, String name2, float amp2, int flag2) {
   WiFiClient client;
   String a[3];
   int i=0;
@@ -41,7 +39,13 @@ void updateAMPS(float amp1) {
   }
   
   // We now create a URI for the request
-  String url = "/sendData.php?AMP1=" + String(amp1);
+  String url = "/sendData.php?location=" + String(location) + 
+                              "&name1=" + String(name1) +
+                              "&Amp1=" + String(amp1) + 
+                              "&flag1=" + String(flag1) + 
+                              "&name2=" + String(name2) + 
+                              "&Amp2=" + String(amp2) + 
+                              "&flag2=" + String(flag2);
   
   Serial.print("Requesting URL: ");
   Serial.println(url);
@@ -57,44 +61,6 @@ void updateAMPS(float amp1) {
       client.stop();
       return;
     }
-  }
-  
-  // Read all the lines of the reply from server and print them to Serial
-  while(client.available()){
-    String line = client.readStringUntil('\r');
- //   Serial.print(line); 모든 것을 보여줌
-
-    delay(10);
-    while(client.available()){
-      String line = client.readStringUntil('\n');
-
-      i= line.indexOf("</temp>");
-
-      if(i>0){
-        tmp_str="<temp>";
-        temp = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
-        Serial.println(temp); 
-
-      }
-
-      i= line.indexOf("</wfKor>");
-
-      if(i>0){
-        tmp_str="<wfKor>";
-        wfEn = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
-        Serial.println(wfEn);  
-      }
-
-      i= line.indexOf("</reh>");
-
-      if(i>0){
-        tmp_str="<reh>";
-        reh = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
-        Serial.println(reh);  
-        break;
-      }
-    }
-    
   }
   
   Serial.println();

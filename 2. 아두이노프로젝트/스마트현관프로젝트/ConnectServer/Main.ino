@@ -2,7 +2,7 @@
 void setMyLed(LedControl lc ,int loc, char ch, bool flag);
 String getTime();
 float getAmps(int channel);
-void updateAMPS(float amp1);
+void updateAMPS(String location, String name1, float amp1, int flag1, String name2, float amp2, int flag2);
 
 void setup() {
   Serial.begin(115200);
@@ -123,7 +123,7 @@ void loop() {
   Serial.print("2port => ");
   Serial.println(getAmps(1));
 
-  updateAMPS(getAmps(0));
+  updateAMPS("거실", "드라이기", getAmps(0), 1, "고데기", getAmps(1), 1);
 
   //인체감지가 되면 날씨정보를 불러와서 뽑아냄
 }
