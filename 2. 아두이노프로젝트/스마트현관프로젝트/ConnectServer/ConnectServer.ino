@@ -7,6 +7,7 @@
  */
 
 #include <ESP8266WiFi.h>
+#include <ArduinoJson.h>
 
 const char* ssid     = "s512";
 const char* password = "01020008167";
@@ -66,5 +67,66 @@ void updateAMPS(String location, String name1, float amp1, int flag1, String nam
   Serial.println();
   Serial.println("closing connection");
 
+}
+
+
+void checkRelay() {
+  WiFiClient client;
+  const int httpPort = 80;
+  if (!client.connect(host, httpPort)) {
+    Serial.println("connection failed");
+    return;
+  }
+  String url = "/getMultitap_json.php";
+   Serial.print("Requesting URL: ");
+  Serial.println(url);
+  
+  // This will send the request to the server
+  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+               "Host: " + host + "\r\n" + 
+               "Connection: close\r\n\r\n");
+  unsigned long timeout = millis();
+  while (client.available() == 0) {
+    if (millis() - timeout > 5000) {
+      Serial.println(">>> Client Timeout !");
+      client.stop();
+      return;
+    }
+  }
+  String line;
+  // Read all the lines of the reply from server and print them to Serial
+  while(client.available()){
+     line = client.readStringUntil('\r');
+    Serial.print(line);
+  }
+
+
+const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
+  DynamicJsonBuffer jsonBuffer(capacity);
+  JsonObject& root = jsonBuffer.parseObject(line);
+  if (!root.success()) {
+    Serial.println(F("Parsing failed!"));
+    return;
+  }
+  //제이슨으로 플래그값 받아오기
+  String flag1 = root["webnautes"][0]["flag1"];
+  String flag2 = root["webnautes"][0]["flag2"];
+
+  if(flag1.equals("0")) {
+    //릴레이 끈다
+    digitalWrite(16, LOW);
+  } else {
+    //릴레이 켠다
+    digitalWrite(16, HIGH);
+  }
+
+  if (flag2.equals("0")) {
+    //릴레이 끈다
+    digitalWrite(5, LOW);
+  } else {
+    //릴레이 켠다
+    digitalWrite(5, HIGH);
+  }
+  Serial.println("closing connection");
 }
 
