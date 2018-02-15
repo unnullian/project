@@ -48,7 +48,6 @@ myWeather getMyWeather() {
     Serial.println("");Serial.println("");
     temp = String(temp.toFloat() - 273.15);
     Serial.print(temp);
-    Serial.println(temp.substring(0,1));
     Serial.println(weather);
 
     myWeather mw;
