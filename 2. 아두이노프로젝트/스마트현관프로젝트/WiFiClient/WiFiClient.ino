@@ -8,73 +8,18 @@
 
 #include <ESP8266WiFi.h>
 
-const char* ssid     = "2.4G";
-const char* password = "01093106215";
+const char* ssid     = "s512";
+const char* password = "01020008167";
 
-const char* host = "www.weather.go.kr";
+const char* host = "192.168.1.8";
 const char* streamId   = "....................";
 const char* privateKey = "....................";
 
-void setup() {
-  Serial.begin(115200);
-  delay(10);
-
-  // We start by connecting to a WiFi network
-
-  Serial.println();
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-  
-  WiFi.begin(ssid, password);
-  
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-
-  Serial.println("");
-  Serial.println("WiFi connected");  
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-}
-
 int value = 0;
 
-void loop() {
-  weather();
 
-  Serial.println(getTime());
-  String hour=getTime().substring(17,19);
-}
 
-String getTime() {
-  WiFiClient client;
-  while (!client.connect("google.com", 80)) {}
-  client.print("HEAD / HTTP/1.1\r\n\r\n");
-  while(!client.available()) {}
-  
-  while(client.available()){
-    if (client.read() =='\n') {    
-      if (client.read() =='D') {    
-        if (client.read() =='a') {    
-          if (client.read() =='t') {    
-            if (client.read() =='e') {    
-              if (client.read() ==':') {  
-                client.read();
-                String timeData = client.readStringUntil('\r');
-                client.stop();
-                return timeData;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-void weather() {
+void updateAMPS(float amp1) {
   WiFiClient client;
   String a[3];
   int i=0;
@@ -96,7 +41,7 @@ void weather() {
   }
   
   // We now create a URI for the request
-  String url = "/wid/queryDFSRSS.jsp?zone=1117053000";
+  String url = "/sendData.php?AMP1=" + String(amp1);
   
   Serial.print("Requesting URL: ");
   Serial.println(url);
@@ -117,7 +62,7 @@ void weather() {
   // Read all the lines of the reply from server and print them to Serial
   while(client.available()){
     String line = client.readStringUntil('\r');
-    Serial.print(line);
+ //   Serial.print(line); 모든 것을 보여줌
 
     delay(10);
     while(client.available()){
