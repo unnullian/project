@@ -2,8 +2,9 @@ GIT - 생활코딩
 아두이노 https://opentutorials.org/module/2106/12247
       https://opentutorials.org/module/682/5562
 	  트랜지스터
+	  
 알고리즘 - 생활코딩
-
+AWS - 생활코딩
 
 
 임베디드레시피
