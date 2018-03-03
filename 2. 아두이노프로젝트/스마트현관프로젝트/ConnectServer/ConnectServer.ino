@@ -18,7 +18,7 @@ const char* privateKey = "....................";
 
 int value = 0;
 
-void updateAMPS(String location, String name1, float amp1, int flag1, String name2, float amp2, int flag2) {
+void updateAMPS(String location, String name1, float amp1, String name2, float amp2) {
   WiFiClient client;
   String a[3];
   int i=0;
@@ -26,7 +26,6 @@ void updateAMPS(String location, String name1, float amp1, int flag1, String nam
   String wfEn;
   String reh;
   String tmp_str;
-  delay(5000);
   ++value;
   // 만약 인체감지가 된다면 api를 불러온다.
   Serial.print("connecting to ");
@@ -43,10 +42,8 @@ void updateAMPS(String location, String name1, float amp1, int flag1, String nam
   String url = "/sendData.php?location=" + String(location) + 
                               "&name1=" + String(name1) +
                               "&Amp1=" + String(amp1) + 
-                              "&flag1=" + String(flag1) + 
                               "&name2=" + String(name2) + 
-                              "&Amp2=" + String(amp2) + 
-                              "&flag2=" + String(flag2);
+                              "&Amp2=" + String(amp2);
   
   Serial.print("Requesting URL: ");
   Serial.println(url);
@@ -87,20 +84,39 @@ void checkRelay() {
                "Connection: close\r\n\r\n");
   unsigned long timeout = millis();
   while (client.available() == 0) {
-    if (millis() - timeout > 5000) {
+    if (millis() - timeout > 1000) {
       Serial.println(">>> Client Timeout !");
       client.stop();
       return;
     }
   }
   String line;
+  int num=0;
   // Read all the lines of the reply from server and print them to Serial
   while(client.available()){
-     line = client.readStringUntil('\r');
-    Serial.print(line);
+     line += client.readStringUntil('}');
+     line += '}';
+     delay(200);
+     
+    
+    
+ 
+    
   }
+  Serial.print(line);
 
+  for (int i=0 ; i<300; i++) {
+    Serial.print(line.charAt(i));
+  }
+  for (int i=0; i<30; i++) {
+    Serial.print(line.charAt(245 + i));
+  }
+Serial.println();
+  Serial.println("다시시작");
+for (int i=0; i<30; i++)
+  Serial.print(line.charAt(271+i));
 
+/*
 const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
   DynamicJsonBuffer jsonBuffer(capacity);
   JsonObject& root = jsonBuffer.parseObject(line);
@@ -108,11 +124,15 @@ const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
     Serial.println(F("Parsing failed!"));
     return;
   }
+  */
   //제이슨으로 플래그값 받아오기
-  String flag1 = root["webnautes"][0]["flag1"];
-  String flag2 = root["webnautes"][0]["flag2"];
-
-  if(flag1.equals("0")) {
+//  String flag1 = root["webnautes"][0]["flag1"];
+ // String flag2 = root["webnautes"][0]["flag2"];
+char flag1 = line.charAt(245);
+char flag2 = line.charAt(271);
+Serial.println(flag1);Serial.println(flag1);Serial.println(flag1);Serial.println(flag1);Serial.println(flag1);
+Serial.println(flag2);Serial.println(flag2);Serial.println(flag2);Serial.println(flag2);Serial.println(flag2);
+  if(flag1=='0') {
     //릴레이 끈다
     digitalWrite(16, LOW);
   } else {
@@ -120,7 +140,7 @@ const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
     digitalWrite(16, HIGH);
   }
 
-  if (flag2.equals("0")) {
+  if (flag2=='0') {
     //릴레이 끈다
     digitalWrite(5, LOW);
   } else {
@@ -128,5 +148,6 @@ const size_t capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(2) + 60;
     digitalWrite(5, HIGH);
   }
   Serial.println("closing connection");
+  
 }
 
